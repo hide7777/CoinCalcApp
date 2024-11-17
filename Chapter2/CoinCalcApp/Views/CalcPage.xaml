@@ -20,7 +20,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -83,10 +82,6 @@
         <Label Text="みずほ銀行窓口"     Grid.Row="13" Grid.Column="0"  VerticalOptions="Center"/>
         <Label Text = "{Binding Mado4}" Grid.Row="13" Grid.Column="1" VerticalOptions="Center" HorizontalTextAlignment="End"/>
         <Label Text="円"                 Grid.Row="13" Grid.Column="2"  VerticalOptions="Center"/>
-
-        <Label Text="コインスター"            Grid.Row="14" Grid.Column="0"  VerticalOptions="Center"/>
-        <Label Text = "{Binding Coinstar}" Grid.Row="14" Grid.Column="1" VerticalOptions="Center" HorizontalTextAlignment="End"/>
-        <Label Text="円"                    Grid.Row="14" Grid.Column="2"  VerticalOptions="Center"/>
 
      </Grid>
 
