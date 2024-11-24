@@ -47,6 +47,7 @@
 	  <ApplicationVersion>4</ApplicationVersion>
 	  <ApplicationDisplayVersion>1.4.0</ApplicationDisplayVersion>
 	  <ApplicationId>jp.auctor.coincalcapp</ApplicationId>
+	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">

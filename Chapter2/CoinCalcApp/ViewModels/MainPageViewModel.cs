@@ -9,75 +9,69 @@ namespace CoinCalcApp.ViewModels;
 
 public class MainPageViewModel : ViewModelBase
 {
-    //private ISemanticScreenReader IscreenReader { get; }
-    //private int _count;
-
-    //public string Title { get; set; }
-
+    /// <summary> 
     /// 1円のテキスト領域定義とチェック内容の定義
-    /// <summary>
+    /// </summary>
     [Required(ErrorMessage = "必須項目")]
     [IntValidation(ErrorMessage = "半角数字を入力")]
     [Range(0, 1000000, ErrorMessage = "0以上の値を入力")]
     public ReactiveProperty<string> OneText { get; }
-    public ReadOnlyReactiveProperty<string> OneTextError { get; }
+    public ReadOnlyReactiveProperty<string?> OneTextError { get; }
 
     /// <summary>
     /// 5円のテキスト領域定義とチェック内容の定義
-    /// <summary>
+    /// </summary>
     [Required(ErrorMessage = "必須項目")]
     [IntValidation(ErrorMessage = "半角数字を入力")]
     [Range(0, 1000000, ErrorMessage = "0以上の値を入力")]
     public ReactiveProperty<string> FiveText { get; }
-    public ReadOnlyReactiveProperty<string> FiveTextError { get; }
+    public ReadOnlyReactiveProperty<string?> FiveTextError { get; }
 
     /// <summary>
     /// 10円のテキスト領域定義とチェック内容の定義
-    /// <summary>
+    /// </summary>
     [Required(ErrorMessage = "必須項目")]
     [IntValidation(ErrorMessage = "半角数字を入力")]
     [Range(0, 1000000, ErrorMessage = "0以上の値を入力")]
     public ReactiveProperty<string> TenText { get; }
-    public ReadOnlyReactiveProperty<string> TenTextError { get; }
+    public ReadOnlyReactiveProperty<string?> TenTextError { get; }
 
     /// <summary>
     /// 50円のテキスト領域定義とチェック内容の定義
-    /// <summary>
+    /// </summary>
     [Required(ErrorMessage = "必須項目")]
     [IntValidation(ErrorMessage = "半角数字を入力")]
     [Range(0, 1000000, ErrorMessage = "0以上の値を入力")]
     public ReactiveProperty<string> FiftyText { get; }
-    public ReadOnlyReactiveProperty<string> FiftyTextError { get; }
+    public ReadOnlyReactiveProperty<string?> FiftyTextError { get; }
 
     /// <summary>
     /// 100円のテキスト領域定義とチェック内容の定義
-    /// <summary>
+    /// </summary>
     [Required(ErrorMessage = "必須項目")]
     [IntValidation(ErrorMessage = "半角数字を入力")]
     [Range(0, 1000000, ErrorMessage = "0以上の値を入力")]
     public ReactiveProperty<string> OneHundredText { get; }
-    public ReadOnlyReactiveProperty<string> OneHundredTextError { get; }
+    public ReadOnlyReactiveProperty<string?> OneHundredTextError { get; }
 
     /// <summary>
     /// 500円のテキスト領域定義とチェック内容の定義
-    /// <summary>
+    /// </summary>
     [Required(ErrorMessage = "必須項目")]
     [IntValidation(ErrorMessage = "半角数字を入力")]
     [Range(0, 1000000, ErrorMessage = "0以上の値を入力")]
     public ReactiveProperty<string> FiveHundredText { get; }
-    public ReadOnlyReactiveProperty<string> FiveHundredTextError { get; }
+    public ReadOnlyReactiveProperty<string?> FiveHundredTextError { get; }
 
     public AsyncReactiveCommand ButtonCommand { get; set; }
 
-    public ReactiveCommand NextPageNavigationCommand { get; }
-
-    public MainPageViewModel(ISemanticScreenReader screenReader, INavigationService navigationService)
-            : base(navigationService)
+    /// <summary>
+    ///コンストラクタ(画面表示に当たって1回設定すれば良い定義を記載。毎回設定が必要な場合は OnNavigatedToで記載する）
+    /// </summary>
+    public MainPageViewModel(IPageDialogService pageDialogService,INavigationService navigationService)
+            : base(pageDialogService,navigationService)
     {
-        //IscreenReader = screenReader;
-        //ButtonCommand = new DelegateCommand(OnButtonCommandExecuted);
-
-        //画面に表示するタイトル名を設定します
+        //画面に表示するタイトル名を設定
         Title = "硬貨預入手数料計算";
 
         //各硬貨用のバリデーション属性を設定
@@ -97,24 +91,12 @@ public class MainPageViewModel : ViewModelBase
         this.FiveHundredText.Value = "0";
 
         //各硬貨用のエラーテキストを定義
-        OneTextError = this.OneText.ObserveErrorChanged
-              .Select(x => x?.Cast<string>()?.FirstOrDefault())
-              .ToReadOnlyReactiveProperty();
-        FiveTextError = this.FiveText.ObserveErrorChanged
-              .Select(x => x?.Cast<string>()?.FirstOrDefault())
-              .ToReadOnlyReactiveProperty();
-        TenTextError = this.TenText.ObserveErrorChanged
-              .Select(x => x?.Cast<string>()?.FirstOrDefault())
-              .ToReadOnlyReactiveProperty();
-        FiftyTextError = this.FiftyText.ObserveErrorChanged
-              .Select(x => x?.Cast<string>()?.FirstOrDefault())
-              .ToReadOnlyReactiveProperty();
-        OneHundredTextError = this.OneHundredText.ObserveErrorChanged
-              .Select(x => x?.Cast<string>()?.FirstOrDefault())
-              .ToReadOnlyReactiveProperty();
-        FiveHundredTextError = this.FiveHundredText.ObserveErrorChanged
-              .Select(x => x?.Cast<string>()?.FirstOrDefault())
-              .ToReadOnlyReactiveProperty();
+        OneTextError = OneText.ObserveErrorChanged.Select(x => x?.Cast<string>()?.FirstOrDefault()).ToReadOnlyReactiveProperty();
+        FiveTextError = this.FiveText.ObserveErrorChanged.Select(x => x?.Cast<string>()?.FirstOrDefault()).ToReadOnlyReactiveProperty();
+        TenTextError = this.TenText.ObserveErrorChanged.Select(x => x?.Cast<string>()?.FirstOrDefault()).ToReadOnlyReactiveProperty();
+        FiftyTextError = this.FiftyText.ObserveErrorChanged.Select(x => x?.Cast<string>()?.FirstOrDefault()).ToReadOnlyReactiveProperty();
+        OneHundredTextError = this.OneHundredText.ObserveErrorChanged.Select(x => x?.Cast<string>()?.FirstOrDefault()).ToReadOnlyReactiveProperty();
+        FiveHundredTextError = this.FiveHundredText.ObserveErrorChanged.Select(x => x?.Cast<string>()?.FirstOrDefault()).ToReadOnlyReactiveProperty();
 
         // 計算ボタンの設定
         ButtonCommand = new[] {
@@ -127,19 +109,11 @@ public class MainPageViewModel : ViewModelBase
             }.CombineLatestValuesAreAllFalse()              // 全てエラーなしの場合に押せるようにする
          .ToAsyncReactiveCommand()
          .WithSubscribe(ButtonProcessing); //ボタンが押された際の処理メソッドを登録
-
     }
 
-    //private string _text = "Click me";
-    //public string Text
-    //{
-    //    get => _text;
-    //   set => SetProperty(ref _text, value);
-    //}
-
-    //public DelegateCommand ButtonCommand { get; }
-
-
+    /// <summary>
+    ///計算ボタン押下時処理
+    /// </summary>
     private async Task ButtonProcessing()
     {
         try
@@ -152,53 +126,13 @@ public class MainPageViewModel : ViewModelBase
             parameters.Add("fifty", FiftyText.Value);
             parameters.Add("oneHundred", OneHundredText.Value);
             parameters.Add("fiveHundred", FiveHundredText.Value);
-
-            //遷移先の計算ページ画面を指定します。
-            //NextPageNavigationCommand = new ReactiveCommand();
-            //NextPageNavigationCommand.Subscribe(async _ => await navigationService.NavigateToSecondPage());
-
-            //RegionNavigationService.RequestNavigate("CalcPage", parameters);
             
-            var result = await NavigationService.NavigateAsync("CalcPage", parameters);
-            if (result.Success)
-            {
-                System.Diagnostics.Debug.WriteLine("■Navigate SUCCESS■");
-            }
-            else if (!result.Cancelled)
-            {
-                System.Diagnostics.Debug.WriteLine("■Navigate NG■");
-            }
-            
+            await NavigationService.NavigateAsync("CalcPage", parameters);
         }
         catch (Exception e)
         {
-            //pageDialogService.DisplayAlertAsync("ERROR", e.ToString(), "OK");
-            System.Diagnostics.Debug.WriteLine(e,ToString());
+            _ = PageDialogService.DisplayAlertAsync("ERROR", e.ToString(), "ERROR");
+            System.Diagnostics.Debug.WriteLine("ERROR:" + e.ToString());
         }
-
-        //return Task.CompletedTask;
     }
-
-
-    //private void OnButtonCommandExecuted()
-    //{
-    //
-    //
-    //}
-
-
-    public override void OnNavigatedFrom(INavigationParameters parameters)
-    {
-        System.Diagnostics.Debug.WriteLine("■OnNavigatedFrom■");
-        //throw new NotImplementedException();
-    }
-
-    public override void OnNavigatedTo(INavigationParameters parameters)
-    {
-        System.Diagnostics.Debug.WriteLine("■OnNavigatedTo■");
-        //throw new NotImplementedException();
-    }
-
-
-
 }

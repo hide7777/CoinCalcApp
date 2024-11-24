@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
 using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
@@ -9,70 +10,44 @@ using System.Text;
 
 namespace CoinCalcApp.ViewModels
 {
-    public class ViewModelBase : BindableBase, IInitialize, IInitializeAsync, IDestructible, INavigatedAware
+    public class ViewModelBase : BindableBase, INavigatedAware
     {
-        protected IRegionNavigationService RegionNavigationService { get; private set; } = null!;
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            RegionNavigationService = navigationContext.NavigationService;
-            System.Diagnostics.Debug.WriteLine("▲OnNavigatedTo▲");
-            var flag = (bool?)navigationContext.Parameters["IsNewOpen"];
-            if (flag == true)
-            {
-                /* 新しく開いたとき */
-                System.Diagnostics.Debug.WriteLine("▲New Open▲");
-            }
-            else
-            {
-                /* 戻ってきたとき */
-                System.Diagnostics.Debug.WriteLine("▲Come Back▲");
-            }
-        }
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            System.Diagnostics.Debug.WriteLine("▲OnNavigatedFrom▲");
-        }
-
-
-        protected INavigationService NavigationService { get; private set; }
-        private string _title;
+        private string _title="default";
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
-        public ViewModelBase(INavigationService navigationService)
+
+        /// <summary>
+        ///ページサービス保存用の定数
+        /// </summary>        
+        protected IPageDialogService PageDialogService { get; private set; }
+        /// <summary>
+        ///ナビゲーションサービス保存用の定数
+        /// </summary>        
+        protected INavigationService NavigationService { get; private set; }
+        /// <summary>
+        ///コンストラクタ
+        /// </summary>        
+        public ViewModelBase(IPageDialogService pageDialogService,INavigationService navigationService)
         {
             NavigationService = navigationService;
+            PageDialogService = pageDialogService;
         }
-        
+
+        /// <summary>
+        ///INavigationServiceのインタフェース実体を定義
+        /// </summary>        
         public virtual void OnNavigatedFrom(INavigationParameters parameters)
         {
-            System.Diagnostics.Debug.WriteLine("▲OnNavigatedFrom▲");
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///INavigationServiceのインタフェース実体を定義
+        /// </summary>        
         public virtual void OnNavigatedTo(INavigationParameters parameters)
         {
-            System.Diagnostics.Debug.WriteLine("▲OnNavigatedTo▲");
-
-            //throw new NotImplementedException();
-        }
-        
-
-        Task IInitializeAsync.InitializeAsync(INavigationParameters parameters)
-        {
-            return Task.CompletedTask;
-        }
-
-        void IInitialize.Initialize(INavigationParameters parameters)
-        {
-            //throw new NotImplementedException();
-        }
-
-        void IDestructible.Destroy()
-        {
-            //throw new NotImplementedException();
-        }
+        }       
     }
 }

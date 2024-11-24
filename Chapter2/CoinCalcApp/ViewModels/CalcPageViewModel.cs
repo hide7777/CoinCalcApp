@@ -8,17 +8,22 @@ using CoinCalcApp.ViewModels;
 
 namespace CoinCalcApp.ViewModels
 {
-    public class CalcPageViewModel : ViewModelBase
+    public class CalcPageViewModel: ViewModelBase
     {
-        //private readonly IPageDialogService _pageDialogService;
+        /// <summary>
+        ///コンストラクタ(画面表示に当たって1回設定すれば良い定義を記載。毎回設定が必要な場合は OnNavigatedToで記載する）
+        /// </summary>
+        public CalcPageViewModel(IPageDialogService pageDialogService, INavigationService navigationService) : base(pageDialogService,navigationService)
+        {
+            //画面に表示するタイトル名を設定
+            Title = "計算結果";
+        }
 
+        /// <summary>
+        ///画面表示される直前の処理
+        /// </summary>
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            System.Diagnostics.Debug.WriteLine("●OnNavigatedTo●");
-
-            //画面に表示するタイトル名を設定します
-            Title = "計算結果";
-
             int one = 0;
             int five = 0;
             int ten = 0;
@@ -67,7 +72,6 @@ namespace CoinCalcApp.ViewModels
                 switch (atm_rem)
                 {
                     case int n when n == 0:
-                        //atm_int = atm_int;
                         break;
                     case int n when n <= 25:
                         atm_int = atm_int + 110;
@@ -199,13 +203,13 @@ namespace CoinCalcApp.ViewModels
             }
             catch (Exception e)
             {
+                PageDialogService.DisplayAlertAsync("ERROR", e.ToString(), "ERROR");
                 System.Diagnostics.Debug.WriteLine("ERROR:" + e.ToString());
-                //_pageDialogService.DisplayAlertAsync("ERROR", e.ToString(), "OK");
             }
         }
 
         //合計金額
-        private string _goukei;
+        private string _goukei="";
         public string Goukei
         {
             get { return _goukei; }
@@ -214,7 +218,7 @@ namespace CoinCalcApp.ViewModels
         }
 
         //合計枚数
-        private string _maisu;
+        private string _maisu="";
         public string Maisu
         {
             get { return _maisu; }
@@ -222,7 +226,7 @@ namespace CoinCalcApp.ViewModels
         }
 
         //郵貯銀行ATM
-        private string _atm1;
+        private string _atm1="";
         public string Atm1
         {
             get { return _atm1; }
@@ -230,7 +234,7 @@ namespace CoinCalcApp.ViewModels
         }
 
         //郵貯銀行窓口
-        private string _mado1;
+        private string _mado1="";
         public string Mado1
         {
             get { return _mado1; }
@@ -238,7 +242,7 @@ namespace CoinCalcApp.ViewModels
         }
 
         //三菱UFJ銀行窓口
-        private string _mado2;
+        private string _mado2="";
         public string Mado2
         {
             get { return _mado2; }
@@ -246,7 +250,7 @@ namespace CoinCalcApp.ViewModels
         }
 
         //三井住友銀行窓口
-        private string _mado3;
+        private string _mado3="";
         public string Mado3
         {
             get { return _mado3; }
@@ -254,7 +258,7 @@ namespace CoinCalcApp.ViewModels
         }
 
         //みずほ銀行窓口
-        private string _mado4;
+        private string _mado4="";
         public string Mado4
         {
             get { return _mado4; }
@@ -262,16 +266,11 @@ namespace CoinCalcApp.ViewModels
         }
 
         //コインスター
-        private string _coinstar;
+        private string _coinstar="";
         public string Coinstar
         {
             get { return _coinstar; }
             set { SetProperty(ref _coinstar, value); }
-        }
-
-        public CalcPageViewModel(ISemanticScreenReader screenReader, INavigationService navigationService)
-                : base(navigationService)
-        {
         }
     }
 }
