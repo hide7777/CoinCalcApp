@@ -5,9 +5,8 @@ namespace CoinCalcApp_2.ViewModels;
 public class MainPageViewModel : ViewModelBase
 {
     //Binding変数を定義します。
-    public AsyncReactiveCommand ButtonCommand { get; }
-    public ReactivePropertySlim<bool> IsButtonEnable = new ReactivePropertySlim<bool>(true);
-
+    public AsyncReactiveCommand ButtonCommand { get; set; }
+ 
     public String OneText { get; }
     public String FiveText { get; }
     public String TenText { get; }
@@ -16,8 +15,8 @@ public class MainPageViewModel : ViewModelBase
     public String FiveHundredText { get; }
 
     //コンストラクタ
-    public MainPageViewModel(IPageDialogService pageDialogService,
-INavigationService navigationService) : base(pageDialogService, navigationService)
+    public MainPageViewModel(IPageDialogService pageDialogService,INavigationService navigationService) 
+        : base(pageDialogService, navigationService)
     {
         //画面に表示するタイトル名を設定します。
         Title = "硬貨預入手数料計算";
