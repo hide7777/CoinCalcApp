@@ -134,7 +134,7 @@ public class MainPageViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            _ = PageDialogService.DisplayAlertAsync("ERROR", e.ToString(), "ERROR");
+            await PageDialogService.DisplayAlertAsync("ERROR", e.ToString(), "ERROR");
             System.Diagnostics.Debug.WriteLine("ERROR:" + e.ToString());
         }
     }

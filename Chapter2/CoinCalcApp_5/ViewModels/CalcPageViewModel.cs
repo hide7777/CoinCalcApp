@@ -196,10 +196,6 @@ namespace CoinCalcApp.ViewModels
                         break;
                 }
                 Mado4 = mado4_int.ToString();
-
-                //コインスター(切り上げ）
-                int coinstar_int = (int)Math.Ceiling(goukei_int * 0.099);
-                Coinstar = coinstar_int.ToString();
             }
             catch (Exception e)
             {
@@ -265,12 +261,5 @@ namespace CoinCalcApp.ViewModels
             set { SetProperty(ref _mado4, value); }
         }
 
-        //コインスター
-        private string _coinstar="";
-        public string Coinstar
-        {
-            get { return _coinstar; }
-            set { SetProperty(ref _coinstar, value); }
-        }
     }
 }
