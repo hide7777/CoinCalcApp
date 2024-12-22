@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-    <TEST_U1.USERS id="1000" name="tenpo001" email="tenpo001@xxx.com" startdate="2018-01-01" lank="0"/>
-    <TEST_U1.USERS id="2000" name="tenpo002" email="tenpo002@xxx.com" startdate="2018-02-01" lank="1"/>
-    <TEST_U1.USERS id="3000" name="tenpo003" email="tenpo003@xxx.com" startdate="2018-03-01" lank="0"/>
-    <TEST_U1.USERS id="4000" name="tenpo004" email="tenpo004@xxx.com" startdate="2018-03-11" lank="1"/>
-    <TEST_U1.USERS id="5000" name="tenpo005" email="tenpo005@xxx.com" startdate="2018-04-04" lank="0"/>
-    <TEST_U1.USERS id="6000" name="tenpo006" email="tenpo006@xxx.com" startdate="2018-05-06" lank="1"/>
-</dataset>
