@@ -1,3 +1,3 @@
-■サーバ側RESTのJAVAサンプルは以下にあります。
+# 繧ｵ繝ｼ繝仙�ｴREST縺ｮJAVA繧ｵ繝ｳ繝励Ν縺ｯ莉･荳九↓縺ゅｊ縺ｾ縺吶�
 
 https://github.com/hide7777/sample.rest.git
