@@ -7,4 +7,8 @@
     <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
     <DefaultDevice>pixel_6_-_api_34</DefaultDevice>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetPlatformIdentifier)'=='iOS'">
+    <RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
+    <PlatformTarget>arm64</PlatformTarget>
+  </PropertyGroup>
 </Project>

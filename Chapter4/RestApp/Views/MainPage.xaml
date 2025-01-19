@@ -1,37 +1,206 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="{Binding Title}"
+             Title="ユーザ情報メンテナンス"
              x:Class="RestApp.Views.MainPage">
 
-  <ScrollView>
-    <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <!--  画面全体に上下に並べるためのスタック   -->
+    <VerticalStackLayout Margin="20,5,20,0" VerticalOptions="FillAndExpand">
 
-      <Image Source="prism.png"
-             SemanticProperties.Description="Cute dot net bot waving hi to you!"
-             HeightRequest="150"
-             HorizontalOptions="Center" />
+        <!--  境界線を描画  -->
+        <Border Stroke="#C49B33" StrokeThickness="1">
+            <!--  上下の余白を定義するための横並びスタック   -->
+            <VerticalStackLayout VerticalOptions="Center" Margin="0,0,0,0">
+                <HorizontalStackLayout VerticalOptions="Center"  Margin="0,5,0,5" >
+                    <Button Text="　検索　"   Command="{Binding ButtonCommand1}" VerticalOptions="Center" HorizontalOptions="FillAndExpand"  BorderColor="Red" BackgroundColor="Blue" TextColor="Aqua" Margin="5,0,5,0" />
+                    <Button Text="　削除　"   Command="{Binding ButtonCommand4}" VerticalOptions="Center" HorizontalOptions="FillAndExpand"  BorderColor="Red" BackgroundColor="Blue" TextColor="Aqua" Margin="5,0,5,0" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout VerticalOptions="Center"  Margin="10,5,0,0" >
+                    <Label Text="ID：　" VerticalOptions="Center" />
+                    <Entry Text="{Binding Input1.Value}" VerticalOptions="Center" Keyboard="Numeric" MaxLength="4" Placeholder="Enter UserID" PlaceholderColor="DarkGray" BackgroundColor="AntiqueWhite" ClearButtonVisibility="WhileEditing"/>
+                    <Label Text="{Binding Input1Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
 
-      <Label Text="Hello, World!"
-             SemanticProperties.HeadingLevel="Level1"
-             FontSize="32"
-             HorizontalOptions="Center" />
+        <!--  境界線を描画  -->
+        <Border Stroke="#C49B33" StrokeThickness="1">
+            <!--  上下の余白を定義するための横並びスタック   -->
+            <VerticalStackLayout VerticalOptions="Center"  Margin="10,0,0,0" >
+                <!--  ボタンを描画   -->
+                <HorizontalStackLayout VerticalOptions="Center"  Margin="0,5,0,5" >
+                    <Button Text="曖昧検索"   Command="{Binding ButtonCommand2}" VerticalOptions="Center" HorizontalOptions="FillAndExpand"  BorderColor="Red" BackgroundColor="Blue" TextColor="Aqua" Margin="0,0,5,0" />
+                </HorizontalStackLayout>
+                <!--  表（Grid）を描画   -->
+                <Grid Padding="10,0,10,0" RowSpacing="5" >
+                    <!-- Gridの行定義  -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!-- Gridの列定義  -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <!-- １行目（氏名）の定義  -->
+                    <Label Grid.Row="0" Grid.Column="0" Text="氏名"                  VerticalOptions="Center"/>
+                    <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Input2.Value}" VerticalOptions="Center" ClearButtonVisibility="WhileEditing" Placeholder="Enter UserName" PlaceholderColor="DarkGray" BackgroundColor="AntiqueWhite"/>
+                    <!-- ２行目（Eメール）の定義  -->
+                    <Label Grid.Row="1" Grid.Column="0" Text="Eメール　"             VerticalOptions="Center"/>
+                    <Entry Grid.Row="1" Grid.Column="1" Text="{Binding Input3.Value}" VerticalOptions="Center" Keyboard="Email" ClearButtonVisibility="WhileEditing" Placeholder="Enter EMail Address" PlaceholderColor="DarkGray" BackgroundColor="AntiqueWhite"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
 
-      <Label Text="Welcome to Prism for .NET MAUI"
-             SemanticProperties.HeadingLevel="Level2"
-             SemanticProperties.Description="Welcome to Prism for dot net Multi platform App U I"
-             FontSize="18"
-             HorizontalOptions="Center" />
+        <!--  境界線を描画  -->
+        <Border Stroke="#C49B33" StrokeThickness="1">
+            <!--  上下の余白を定義するための横並びスタック   -->
+            <VerticalStackLayout VerticalOptions="Center" Margin="10,5,0,5" >
+                <!--  枠線を描画   -->
+                <!--  上下の余白を定義するための横並びスタック   -->
+                <HorizontalStackLayout VerticalOptions="Center"  Margin="0,0,0,0" >
+                    <Button Text="追加・更新" Command="{Binding ButtonCommand3}" VerticalOptions="Center" HorizontalOptions="FillAndExpand"  BorderColor="Red" BackgroundColor="Blue" TextColor="Aqua" Margin="0,0,5,0" />
+                </HorizontalStackLayout >
+                <!--  表（Grid）を描画   -->
+                <Grid Padding="10,0,10,0" ColumnSpacing="10" RowSpacing="0" >
+                    <!-- Gridの行定義  -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!-- Gridの列定義  -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-      <Button Text="{Binding Text}"
-              SemanticProperties.Hint="Counts the number of times you click"
-              Command="{Binding CountCommand}"
-              HorizontalOptions="Center" />
+                    <!-- １行目の定義  -->
+                    <Label                 Grid.Row="0" Grid.Column="0" Text="ID"                 VerticalOptions="Center" />
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="1">
+                        <Entry Text="{Binding Text1.Value}" VerticalOptions="Center" Keyboard="Numeric" MaxLength="4" Placeholder="Enter UserID" PlaceholderColor="DarkGray" BackgroundColor="AntiqueWhite" ClearButtonVisibility="WhileEditing"/>
+                        <Label Text="{Binding Text1Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                    </HorizontalStackLayout>
+
+                    <!-- ２行目の定義  -->
+                    <Label                 Grid.Row="1" Grid.Column="0" Text="氏名"                  VerticalOptions="Center"/>
+                    <HorizontalStackLayout Grid.Row="1" Grid.Column="1">
+                        <Entry  Text="{Binding Text2.Value}" VerticalOptions="Center" ClearButtonVisibility="WhileEditing" Placeholder="Enter UserName" PlaceholderColor="DarkGray" BackgroundColor="AntiqueWhite"/>
+                        <Label Text="{Binding Text2Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                    </HorizontalStackLayout>
+
+                    <!-- ３行目の定義  -->
+                    <Label                 Grid.Row="2" Grid.Column="0" Text="Eメール"               VerticalOptions="Center"/>
+                    <HorizontalStackLayout Grid.Row="2" Grid.Column="1">
+                        <Entry Text="{Binding Text3.Value}" VerticalOptions="Center" Keyboard="Email" MaxLength="100" ClearButtonVisibility="WhileEditing" Placeholder="Enter EMail Address" PlaceholderColor="DarkGray" BackgroundColor="AntiqueWhite"/>
+                        <Label Text="{Binding Text3Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                    </HorizontalStackLayout>
+
+                        <!-- ４行目の定義  -->
+                    <Label                 Grid.Row="3" Grid.Column="0" Text="開始日"              VerticalOptions="Center"/>
+                    <HorizontalStackLayout Grid.Row="3" Grid.Column="1">
+                        <Entry Text="{Binding Text4.Value}"  VerticalOptions="Center" Keyboard="Numeric" MaxLength="4"  Placeholder="20XX" PlaceholderColor="DarkGray"  BackgroundColor="AntiqueWhite"/>
+                        <Entry Text="{Binding Text5.Value}"  VerticalOptions="Center" Keyboard="Numeric" MaxLength="2"  Placeholder="月"   PlaceholderColor="DarkGray"  BackgroundColor="AntiqueWhite"/>
+                        <Entry Text="{Binding Text6.Value}"  VerticalOptions="Center" Keyboard="Numeric" MaxLength="2"  Placeholder="日"   PlaceholderColor="DarkGray"  BackgroundColor="AntiqueWhite"/>
+                        <Label Text="{Binding Text4Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                        <Label Text="{Binding Text5Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                        <Label Text="{Binding Text6Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                    </HorizontalStackLayout>
+
+                    <!-- ５行目の定義  -->
+                    <Label                 Grid.Row="4" Grid.Column="0" Text="職能コード"             VerticalOptions="Center"/>
+                    <HorizontalStackLayout Grid.Row="4" Grid.Column="1">
+                        <Entry Text="{Binding Text7.Value}"  VerticalOptions="Center" Keyboard="Numeric" MaxLength="1" Placeholder="Enter Code" PlaceholderColor="DarkGray" BackgroundColor="AntiqueWhite"/>
+                        <Label Text="{Binding Text7Error.Value}" VerticalOptions="Center" TextColor="Red" />
+                    </HorizontalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!--  境界線を描画  -->
+        <Border Stroke="#C49B33" StrokeThickness="1" >
+            <!--  データを表示するGridの列タイトルを表示するGrid   -->
+            <Grid Padding="5,5,0,5" ColumnSpacing="5" RowSpacing="0" BackgroundColor="SkyBlue" >
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#ffaaaa" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+                <!-- Gridの行定義  -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <!-- Gridの列定義  -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="35" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="180" />
+                </Grid.ColumnDefinitions>
+                <!-- Gridの列１  -->
+                <Label Grid.Column="0" VerticalOptions="Center" Text="ID" />
+                <!-- Gridの列２  -->
+                <Label Grid.Column="1" VerticalOptions="Center" Text="氏名" />
+                <!-- Gridの列３  -->
+                <Label Grid.Column="2" VerticalOptions="Center" Text="Eメール" />
+            </Grid>
+        </Border>
+
+        <!--  検索結果のデータを描画する枠   -->
+        <CollectionView ItemsSource="{Binding Path=Items}" HeightRequest="{Binding ListHeight}" BackgroundColor="AliceBlue" 
+                        SelectionMode="Single" 
+                        SelectedItem="{Binding SelectedItem}" 
+                        SelectionChangedCommand="{Binding CollectionViewSelectedCommand}" 
+                        SelectionChangedCommandParameter="{Binding .}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <!--  枠線を描画   -->
+                    <Border Stroke="#C49B33" StrokeThickness="1">
+                        <!--  検索結果のデータを描画するGrid   -->
+                        <Grid Padding="5,10,0,9" ColumnSpacing="5">
+                            <!-- Grid選択時の背景色を定義  -->
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="#ffaaaa" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+                            <!-- Gridの行定義  -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <!-- Gridの列定義  -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="180" />
+                            </Grid.ColumnDefinitions>
+                            <!-- Gridの列１  -->
+                            <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Id}" />
+                            <!-- Gridの列２  -->
+                            <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding Name}" />
+                            <!-- Gridの列３  -->
+                            <Label Grid.Column="2" VerticalOptions="Center" Text="{Binding Email}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
     </VerticalStackLayout>
-  </ScrollView>
-
 </ContentPage>
