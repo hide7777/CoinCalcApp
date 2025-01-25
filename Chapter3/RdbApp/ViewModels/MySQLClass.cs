@@ -15,7 +15,7 @@ namespace RdbApp.ViewModels
             try
             {
                 DataTable dt = new DataTable();
-                string connString = "Server=192.168.X.X;Port=3306;database=test;User ID=xxxx;Password=yyyy;charset=utf8";
+                string connString = "Server=192.168.1.40;Port=3306;database=test;User ID=testuser;Password=password;charset=utf8";
                 using (var con = new MySqlConnection(connString))
                 {
                     using (MySqlCommand cmd = con.CreateCommand())

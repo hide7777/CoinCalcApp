@@ -18,7 +18,7 @@ namespace RdbApp.ViewModels
                 //TransactionScopeの利用
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    string connString = "Data Source=192.168.X.X:1521/ORCL;User ID=xxxx;Password=yyyy";
+                    string connString = "Data Source=192.168.1.21:1521/FREEPDB1;User ID=kakei;Password=kakei";
                     string select_string = "select * from SAMP_CUSTOMER_ORACLE order by cust_no";
                     string insert_string = "insert into SAMP_CUSTOMER_ORACLE values (2000,10,'テスト','03-1268-1111',TO_DATE('2021/01/02','yyyy/mm/dd hh24:mi:ss'),TO_TIMESTAMP('2022/10/30 11:11:00')";
                     string update_string = "update SAMP_CUSTOMER_ORACLE set CUST_NAME='テスト一郎' Where CUST_NO=2000 AND CASH=10";

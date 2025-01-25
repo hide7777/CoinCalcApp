@@ -15,7 +15,7 @@ namespace RdbApp.ViewModels
             try
             {
                 DataTable dt = new DataTable();
-                string connString = "Server=192.168.X.XX;Port=5444;Database=edb;Username=xxxx;Password=yyyy;SearchPath=zzzz";
+                string connString = "Server=192.168.1.40;Port=5444;Database=edb;Username=enterprisedb;Password=enterprisedb;SearchPath=test_u1";
                 using (var con = new NpgsqlConnection(connString))
                 {
                     using (NpgsqlCommand cmd = con.CreateCommand())

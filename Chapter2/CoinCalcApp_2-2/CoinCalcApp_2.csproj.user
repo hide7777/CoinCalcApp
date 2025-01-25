@@ -3,12 +3,17 @@
   <PropertyGroup>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
     <ActiveDebugFramework>net8.0-ios</ActiveDebugFramework>
-    <ActiveDebugProfile>Simulator</ActiveDebugProfile>
+    <ActiveDebugProfile>iPhone 16 Pro Max iOS 18.2</ActiveDebugProfile>
     <SelectedPlatformGroup>Simulator</SelectedPlatformGroup>
-    <DefaultDevice>iPhone 15 iOS 17.4</DefaultDevice>
+    <DefaultDevice>iPhone 16 Pro Max iOS 18.2</DefaultDevice>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetPlatformIdentifier)'=='iOS'">
-    <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
-    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
+    <PlatformTarget>arm64</PlatformTarget>
   </PropertyGroup>
+  <ItemGroup>
+    <MauiXaml Update="Views\CalcPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+  </ItemGroup>
 </Project>

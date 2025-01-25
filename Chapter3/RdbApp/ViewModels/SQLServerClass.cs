@@ -15,7 +15,7 @@ namespace RdbApp.ViewModels
             try
             {
                 DataTable dt = new DataTable();
-                string connString = "Data Source=192.168.X.X,1433;Initial Catalog=master;User ID=xxxx;Password=yyyy;Integrated Security=false;Encrypt=false";
+                string connString = "Data Source=192.168.1.84,1433;Initial Catalog=master;User ID=sa;Password=moritaka;Integrated Security=false;Encrypt=false";
                 using (var con = new SqlConnection(connString))
                 {
                     using (SqlCommand cmd = con.CreateCommand())
