@@ -13,7 +13,7 @@ Cpoyright 2025/1/2 auctor(尾﨑英一)
 利用するgitは、以下のtortoisegitをWindowsへインストールすると良いでしょう。<BR>
 https://tortoisegit.org/<BR>
 
-gitを使って、以下のリポジトリをローカルの環境へクローン（複製）してください。<BR>
+gitを使って、以下のリポジトリをローカルの環境へクローン（複製）をしてください。<BR>
 https://github.com/hide7777/CoinCalcApp.git
 
 ## 書籍紹介
