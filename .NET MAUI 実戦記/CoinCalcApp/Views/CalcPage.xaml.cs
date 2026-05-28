@@ -19,7 +19,7 @@ public partial class CalcPage : ContentPage
 
     // 画面下端のジェスチャーナビ領域の高さ(DIU)。Android で実測してキャッシュする。
     // iOS は ContentPage の ios:Page.UseSafeArea="True" 側で確保するため 0 のまま。
-    private double _bottomInsetDiu;
+    private double _bottomInsetDiu = 0;
 
     public CalcPage(CalcPageViewModel viewModel)
     {
