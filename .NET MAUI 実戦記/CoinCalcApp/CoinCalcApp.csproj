@@ -1,0 +1,163 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-ios;net10.0-android</TargetFrameworks>
+    <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+    <!-- <TargetFrameworks>$(TargetFrameworks);net10.0-tizen</TargetFrameworks> -->
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CoinCalcApp</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Display name -->
+    <ApplicationTitle>CoinCalcApp</ApplicationTitle>
+
+    <!-- App Identifier -->
+    <ApplicationId>jp.auctor.coincalcapp</ApplicationId>
+    <ApplicationIdGuid>9fc579bc-2f88-4ab8-af05-d80885b79e66</ApplicationIdGuid>
+
+    <!-- Versions -->
+    <!-- App Store Connect 側で 2.0 のバージョン枠が作成済みのため、それに合わせる。
+         ApplicationVersion(ビルド番号)はアップロードごとに必ず +1 する必要がある。
+         22 までアップロード済みのため、今回は 23。 -->
+    <ApplicationDisplayVersion>2.0</ApplicationDisplayVersion>
+    <ApplicationVersion>23</ApplicationVersion>
+
+    <!-- iOS 15.0 以上が必須。Plugin.AdMob 3.0.2 内部の Jc.GMA.iOS バインディングが
+         iOS 15.0 を要求しており、14.2 設定では実機で MobileAds.SharedInstance が null になり
+         AppDelegate.CreateMauiApp() で NullReferenceException が起きる(Issue #56)。
+         Info.plist の MinimumOSVersion も 15.0 に揃える必要がある。 -->
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
+    <!-- AdMob (Google Play Services Ads) は minSdk 23 を要求 -->
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">23.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <WindowsPackageType>None</WindowsPackageType>
+    <NuGetAudit>True</NuGetAudit>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <!-- NU1608: 推移依存パッケージの版数解決に関する警告(MAUI workload 提供版数の組み合わせ問題)。実行時影響なし。 -->
+    <NoWarn>$(NoWarn);NU1608</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
+    <AndroidUseAapt2>True</AndroidUseAapt2>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+    <EmbedOnDemandResources>True</EmbedOnDemandResources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+    <EmbedOnDemandResources>True</EmbedOnDemandResources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU'">
+    <AndroidKeyStore>False</AndroidKeyStore>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android34.0|AnyCPU'">
+    <AndroidKeyStore>False</AndroidKeyStore>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
+    <ProvisioningType>manual</ProvisioningType>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignProvision></CodesignProvision>
+  </PropertyGroup>
+
+  <!-- iOS Release(実機/TestFlight)起動時クラッシュ対策:Mono インタープリタを有効化する。
+       症状:Debug/シミュレータでは起動するが、TestFlight 実機(iOS 26.5)で起動直後に
+       SIGABRT。クラッシュログのスタックは mono_jit_init → load_aot_module →
+       mono_assembly_request_load_from → abort で、.NET ランタイム初期化中の
+       AOT モジュールロード失敗を示す。
+       原因:実機 Release は AOT のみ。AOT がネイティブ本体を生成できなかったメソッド
+       (リフレクション/動的コード/ジェネリクス多用のパッケージ。本アプリでは ReactiveProperty,
+       Plugin.AdMob が該当)を実行しようとすると JIT にフォールバックするが、iOS は JIT 禁止のため
+       プロセスが abort する。
+       対策:インタープリタを有効化すると、AOT がカバーできないメソッドをインタープリタで実行でき、
+       JIT 禁止の制約を回避できる(Apple 公認の合法手段、審査も通る)。本アプリは計算主体で
+       重い処理がないため、インタープリタによる速度低下は実用上ほぼ無視できる。
+       参考:https://learn.microsoft.com/en-us/dotnet/maui/macios/interpreter -->
+  <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
+    <UseInterpreter>true</UseInterpreter>
+    <MtouchInterpreter>all</MtouchInterpreter>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- App Icon -->
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#FFFFFF" />
+
+    <!-- Splash Screen -->
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#FFFFFF" />
+
+    <!-- Images -->
+    <MauiImage Include="Resources\Images\*" />
+
+    <!-- Custom Fonts -->
+    <MauiFont Include="Resources\Fonts\*" />
+
+    <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+    <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- MAUI 10:Plugin.AdMob 3.0.2 が Microsoft.Maui.Controls >= 10.0.30 を要求する。
+         Plugin.MauiMTAdmob は .NET 9 までしか対応していないため、.NET 10 環境では使用不可。
+         代わりに Plugin.AdMob 3.0.2 を使用し、iOS 実機で MobileAds.SharedInstance が null になる
+         問題は SupportedOSPlatformVersion を 15.0 に上げることで回避(GitHub Issue #56)。 -->
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.60" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+    <!-- Plugin.AdMob v3.0.2 (marius-bughiu)。
+         iOS は AppDelegate で MobileAds.SharedInstance.Start() を明示的に呼ぶ設計のため
+         起動シーケンス制御が必要。 -->
+    <PackageReference Include="Plugin.AdMob" Version="3.0.2" />
+    <PackageReference Include="ReactiveProperty" Version="9.7.0" />
+  </ItemGroup>
+
+  <!-- .NET 10 + Plugin.AdMob (transitive で Xamarin.GooglePlayServices.Ads.Lite) で
+       Xamarin.AndroidX.Compose.Runtime.Annotation の .Jvm と .Android の両方が
+       含まれ、androidx.compose.runtime.Immutable の重複クラスエラー(D8/R8)が出る。
+       Android では .Android.aar 側だけあれば十分なので、.Jvm を ExcludeAssets で除外する。 -->
+  <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+    <PackageReference Include="Xamarin.AndroidX.Compose.Runtime.Annotation.Jvm" Version="1.10.0.1" ExcludeAssets="all" />
+    <!-- Google Play Billing Library v7+ のバインディング。
+         Step 4(課金実装)で BillingPurchaseService.Android.cs から使用。 -->
+    <PackageReference Include="Xamarin.Android.Google.BillingClient" Version="7.1.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiXaml Update="Views\CalcPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="AppShell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+  </ItemGroup>
+
+  <!-- Plugin.AdMob v3.0.2 の iOS ビルドで必須:Swift ランタイム静的ライブラリのリンク。
+       内部で Jc.GMA.iOS (Google Mobile Ads SDK バインディング) を使用しており、
+       これが Swift 依存を持つ。iOS 用ターゲットの時だけ適用される。 -->
+  <Target Name="LinkWithSwift" Condition="$(TargetFramework.Contains('-ios'))" DependsOnTargets="_ParseBundlerArguments;_DetectSdkLocations" BeforeTargets="_LinkNativeExecutable">
+    <PropertyGroup>
+        <_SwiftPlatform Condition="$(RuntimeIdentifier.StartsWith('iossimulator-'))">iphonesimulator</_SwiftPlatform>
+        <_SwiftPlatform Condition="$(RuntimeIdentifier.StartsWith('ios-'))">iphoneos</_SwiftPlatform>
+    </PropertyGroup>
+    <ItemGroup>
+        <_CustomLinkFlags Include="-L" />
+        <_CustomLinkFlags Include="/usr/lib/swift" />
+        <_CustomLinkFlags Include="-L" />
+        <_CustomLinkFlags Include="$(_SdkDevPath)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(_SwiftPlatform)" />
+        <_CustomLinkFlags Include="-Wl,-rpath" />
+        <_CustomLinkFlags Include="-Wl,/usr/lib/swift" />
+    </ItemGroup>
+  </Target>
+
+</Project>

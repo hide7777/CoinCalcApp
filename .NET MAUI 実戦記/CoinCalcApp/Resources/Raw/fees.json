@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "version": "2024-04-01",
+  "lastUpdated": "2024-04-01",
+  "source": "各銀行公式サイト(2024年4月時点)",
+  "rules": [
+    {
+      "type": "YuchoAtm",
+      "bankId": "yucho",
+      "displayName": "ゆうちょ銀行",
+      "channel": "ATM",
+      "maxCoinsPerTransaction": 100,
+      "batchSize": 100,
+      "batchFee": 330,
+      "remainderTiers": [
+        { "maxCoins": 0,  "fee": 0   },
+        { "maxCoins": 25, "fee": 110 },
+        { "maxCoins": 50, "fee": 220 },
+        { "maxCoins": 99, "fee": 330 }
+      ]
+    },
+    {
+      "type": "TieredCounter",
+      "bankId": "yucho",
+      "displayName": "ゆうちょ銀行",
+      "channel": "窓口",
+      "tiers": [
+        { "maxCoins": 100,  "fee": 0    },
+        { "maxCoins": 500,  "fee": 550  },
+        { "maxCoins": 1000, "fee": 1100 }
+      ],
+      "batchSize": 500,
+      "batchFee": 550
+    },
+
+    {
+      "type": "Free",
+      "bankId": "mufg",
+      "displayName": "三菱UFJ銀行",
+      "channel": "ATM",
+      "maxCoinsPerTransaction": 100
+    },
+    {
+      "type": "TieredCounter",
+      "bankId": "mufg",
+      "displayName": "三菱UFJ銀行",
+      "channel": "窓口",
+      "tiers": [
+        { "maxCoins": 100,  "fee": 0    },
+        { "maxCoins": 500,  "fee": 550  },
+        { "maxCoins": 1000, "fee": 1100 }
+      ],
+      "batchSize": 500,
+      "batchFee": 550
+    },
+
+    {
+      "type": "Free",
+      "bankId": "smbc",
+      "displayName": "三井住友銀行",
+      "channel": "ATM",
+      "maxCoinsPerTransaction": 100,
+      "maxFiveHundredYenPerTransaction": 75
+    },
+    {
+      "type": "TieredCounter",
+      "bankId": "smbc",
+      "displayName": "三井住友銀行",
+      "channel": "窓口",
+      "tiers": [
+        { "maxCoins": 300,  "fee": 0    },
+        { "maxCoins": 500,  "fee": 550  },
+        { "maxCoins": 1000, "fee": 1100 }
+      ],
+      "batchSize": 500,
+      "batchFee": 550
+    },
+
+    {
+      "type": "Free",
+      "bankId": "mizuho",
+      "displayName": "みずほ銀行",
+      "channel": "ATM",
+      "maxCoinsPerTransaction": 100
+    },
+    {
+      "type": "TieredCounter",
+      "bankId": "mizuho",
+      "displayName": "みずほ銀行",
+      "channel": "窓口",
+      "tiers": [
+        { "maxCoins": 100,  "fee": 0    },
+        { "maxCoins": 500,  "fee": 550  },
+        { "maxCoins": 1000, "fee": 1320 }
+      ],
+      "batchSize": 500,
+      "batchFee": 660
+    },
+
+    {
+      "type": "Free",
+      "bankId": "resona",
+      "displayName": "りそな銀行",
+      "channel": "ATM",
+      "maxCoinsPerTransaction": 100
+    },
+    {
+      "type": "TieredCounter",
+      "bankId": "resona",
+      "displayName": "りそな銀行",
+      "channel": "窓口",
+      "tiers": [
+        { "maxCoins": 100,  "fee": 0    },
+        { "maxCoins": 500,  "fee": 660  },
+        { "maxCoins": 1000, "fee": 1320 }
+      ],
+      "batchSize": 500,
+      "batchFee": 660
+    }
+  ]
+}

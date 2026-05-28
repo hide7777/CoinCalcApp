@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:CoinCalcApp.Views"
+       x:Class="CoinCalcApp.AppShell"
+       FlyoutBehavior="Disabled">
+
+  <!-- 起動時のルートページ。CalcPage は Routing.RegisterRoute で動的登録するため
+       ShellContent には含めない(GoToAsync("CalcPage", ...) でナビゲーションする)。 -->
+  <ShellContent
+      Title="硬貨預入手数料計算"
+      ContentTemplate="{DataTemplate views:MainPage}"
+      Route="MainPage" />
+
+</Shell>

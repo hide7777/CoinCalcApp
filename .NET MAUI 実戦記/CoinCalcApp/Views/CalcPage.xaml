@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CoinCalcApp.ViewModels"
+             xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="True"
+             x:DataType="vm:CalcPageViewModel"
+             Title="{Binding Title}"
+             x:Class="CoinCalcApp.Views.CalcPage">
+
+  <!-- レイアウト構造(2.0.2 で見切れ対策のため変更):
+       Plugin.AdMob のバナーは ScrollView の中に置くとネイティブビューがロードできず
+       広告が出ないため、バナーだけは Grid の固定行(Row 1)に置く。
+       一方、課金エリア(広告を消す/購入の復元)は、銀行一覧と合わせて画面の高さを
+       超えることがあり、固定配置だと下端のジェスチャーナビ領域に押し出されて
+       「購入の復元」が押せなくなる。そこで課金エリアは ScrollView の中(一覧の下)に入れ、
+       画面が足りない時はスクロールして到達できるようにする。
+       Row 0 = スクロール領域(合計・最安ルート・銀行一覧・課金エリア)
+       Row 1 = バナー広告(固定) -->
+  <Grid RowDefinitions="*,Auto">
+
+    <!-- ─────────── スクロール可能領域 ─────────── -->
+    <ScrollView Grid.Row="0">
+      <VerticalStackLayout Padding="10,30,10,10" Spacing="6">
+
+        <!-- ─────────── 合計 ─────────── -->
+        <Label Text="＜合計＞"/>
+
+        <Grid ColumnDefinitions="Auto,*,Auto">
+          <Label Text="合計金額"            Grid.Column="0" VerticalOptions="Center"/>
+          <Label Text="{Binding Goukei}"    Grid.Column="1" VerticalOptions="Center" HorizontalTextAlignment="End"/>
+          <Label Text="円"                  Grid.Column="2" VerticalOptions="Center"/>
+        </Grid>
+
+        <Grid ColumnDefinitions="Auto,*,Auto">
+          <Label Text="合計枚数"            Grid.Column="0" VerticalOptions="Center"/>
+          <Label Text="{Binding Maisu}"     Grid.Column="1" VerticalOptions="Center" HorizontalTextAlignment="End"/>
+          <Label Text="枚"                  Grid.Column="2" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- ─────────── 最安ルート ─────────── -->
+        <Frame IsVisible="{Binding HasRecommendation}"
+               BackgroundColor="#E8F4FD"
+               BorderColor="#4A90E2"
+               CornerRadius="8"
+               Padding="12,10"
+               Margin="0,10,0,5"
+               HasShadow="False">
+          <VerticalStackLayout Spacing="4">
+            <Label Text="🏆 最安ルート"
+                   FontAttributes="Bold"
+                   FontSize="14"
+                   TextColor="#2C5F8D"/>
+            <Label Text="{Binding CheapestRecommendation}"
+                   FontSize="16"
+                   TextColor="#1A3A5C"/>
+          </VerticalStackLayout>
+        </Frame>
+
+        <!-- ─────────── 硬貨預入手数料 ─────────── -->
+        <Label Text="＜硬貨預入手数料＞" Margin="0,10,0,0"/>
+        <Label Text="※ATMで1回に投入できる硬貨は100枚まで"
+               FontSize="12"
+               TextColor="Gray"/>
+        <Label Text="※三井住友銀行ATMは500円硬貨のみ1回75枚まで"
+               FontSize="12"
+               TextColor="Gray"/>
+
+        <VerticalStackLayout BindableLayout.ItemsSource="{Binding BankRows}" Spacing="2">
+          <BindableLayout.ItemTemplate>
+            <DataTemplate x:DataType="vm:BankFeeRowVm">
+              <Grid ColumnDefinitions="Auto,*" Padding="0,3">
+                <Label Text="{Binding Label}"
+                       Grid.Column="0"
+                       VerticalOptions="Center"/>
+                <Label Text="{Binding ValueText}"
+                       Grid.Column="1"
+                       VerticalOptions="Center"
+                       HorizontalTextAlignment="End"/>
+              </Grid>
+            </DataTemplate>
+          </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+
+        <!-- ─────────── 課金エリア(スクロール領域の最後に配置) ─────────── -->
+        <!-- 固定配置だと銀行一覧+バナーで画面高さを超えた時に下端へ押し出され、
+             「購入の復元」がジェスチャーナビ領域に隠れて押せなくなる。
+             ScrollView 内に入れることで、足りなければスクロールして到達できる。
+             下端の余白(ジェスチャーナビ領域分)はコードビハインドの
+             OnHandlerChanged で動的に設定する。 -->
+        <VerticalStackLayout x:Name="PurchaseArea"
+                             Spacing="6"
+                             Margin="0,16,0,0"
+                             Padding="0,0,0,8"
+                             IsVisible="{Binding ShouldShowPurchaseButton.Value}">
+          <Button Text="広告を消す ¥160"
+                  Command="{Binding PurchaseAdFreeCommand}"
+                  BackgroundColor="#4A90E2"
+                  TextColor="White"
+                  CornerRadius="8"
+                  FontSize="14"
+                  HeightRequest="44"/>
+          <Button Text="購入の復元"
+                  Command="{Binding RestorePurchasesCommand}"
+                  BackgroundColor="Transparent"
+                  TextColor="#4A90E2"
+                  FontSize="12"
+                  Padding="0,4"/>
+        </VerticalStackLayout>
+
+      </VerticalStackLayout>
+    </ScrollView>
+
+    <!-- ─────────── バナー広告(課金未済時のみ表示、ScrollView の外で固定) ─────────── -->
+    <!-- ScrollView の中だと Plugin.AdMob のネイティブビューがロードできないため、
+         Grid.Row="1" として ScrollView の外で固定配置する。
+         下端 Margin はジェスチャーナビ領域と重ならないようコードビハインドで動的に設定する。
+
+         Plugin.AdMob 3.0.2 の Issue #64 対応:
+         バナーは「ロード成功時のみ表示」とする(IsLoaded だと出たり出なかったり安定しない)。
+         x:Name で参照を作り、コードビハインドで OnAdLoaded を受けてから IsVisible=true にする。
+         初期は IsVisible="False" にしておく。 -->
+    <admob:BannerAd Grid.Row="1"
+                    x:Name="CalcBanner"
+                    AdUnitId="{Binding BannerAdUnitId}"
+                    HeightRequest="60"
+                    Margin="10,5,10,5"
+                    IsVisible="False"/>
+
+  </Grid>
+
+</ContentPage>
